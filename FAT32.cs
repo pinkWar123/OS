@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Numerics;
 using System.Text;
-
+using System.Collections.Generic;
 class FAT32
 {
     // This area is used for Boost_Sector's Variables
@@ -34,8 +34,29 @@ class FAT32
     {
 
     }
+    public FAT32(string file)
+    {
+        using (FileStream filestream = new FileStream(file,FileMode.Open, FileAccess.Read))
+        {
+            ReadBoostSector(filestream);
+            ReadFAT1(filestream);
+            
+        }
+    }
     ~FAT32() { }
 
+    public List<FileManager> ReadFiles(string file)
+    {
+        using (FileStream filestream = new FileStream(file, FileMode.Open, FileAccess.Read))
+        {
+            ReadBoostSector(filestream);
+            ReadFAT1(filestream);
+
+            List<FileManager> files = new List<FileManager>();
+            ReadDET(filestream, StartingClusterOfRDET, ref files);
+            return files;
+        }
+    }
     public void ReadBoostSector(FileStream fileStream)
     {
         fileStream.Seek(0, SeekOrigin.Begin);
@@ -94,7 +115,7 @@ class FAT32
         List<UInt32> ListofCluster = FindListOfClusters(StartingCluster);
         Queue<byte[]> EntryQueue = new Queue<byte[]>();
 
-        for (int i = 0; i < ListofCluster.Count(); i++)
+        for (int i = 0; i < ListofCluster.Count; i++)
         {
             fileStream.Seek(OffSetWithCluster(ListofCluster[i]), SeekOrigin.Begin);
             int Count = 0;

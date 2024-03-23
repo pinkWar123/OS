@@ -21,20 +21,19 @@ namespace DiskDisplay
         {
             InitializeComponent();
             //InitializeTree();
-            var folders = FakeFolder.GetFakeFolder();
+            var fat32 = new FAT32();
+
+            var folders = fat32.ReadFiles(@"\\.\E:");
             Image1.LoadImageList();
             folderTree.ImageList = Image1.ImageList;
-            folderTree.Nodes.Add(folders.GetNode());
-            folders.Populate();
+            foreach(var folder in folders)
+            {
+                folder.Populate();
+                folder.PopulateListView(listView1);
+                folderTree.Nodes.Add(folder.GetNode());
+                listView1.Items.Add(folder.GetListViewItem());
+            }
 
-            ListViewItem item = new ListViewItem("Folder", 0);
-            //item.ImageKey = "folderIcon";
-            item.SubItems.Add("File");
-            item.SubItems.Add("File2");
-            item.SubItems.Add("File3");
-            folders.PopulateListView(listView1);
-
-            //listView1.Items.Add(item);
         }
 
         private void Form1_Load(object sender, EventArgs e)

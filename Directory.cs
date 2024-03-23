@@ -1,6 +1,10 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+
 class FATDirectory : FATFileManager
 {
     public List<FileManager> Children;
@@ -26,5 +30,36 @@ class FATDirectory : FATFileManager
         {
             Children[i].PrintImfomations(level + 1);
         }
+    }
+
+    public override int GetSize() 
+    {
+        var totalSize = 0;
+        foreach (var child in Children)
+        {
+            totalSize += child.GetSize();
+        }
+        return totalSize;
+    }
+
+    // Methods for UI
+    public override void Populate()
+    {
+        CurrentItem.Tag = this;
+        CurrentItem.Text = MainName;
+        CurrentNode.ImageKey = "folderIcon";
+        CurrentNode.SelectedImageKey = "folderIcon";
+        if (Children.Count() == 0) return;
+        foreach (var child in Children)
+        {
+            TreeNode node = new TreeNode(child.MainName);
+
+            child.SetNode(node);
+            child.Populate();
+            CurrentNode.Nodes.Add(node);
+        }
+        CurrentItem.SubItems.Add("Folder");
+        CurrentItem.SubItems.Add(GetSize().ToString());
+        CurrentItem.SubItems.Add(Creationdatetime.ToString());
     }
 }

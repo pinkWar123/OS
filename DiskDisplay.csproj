@@ -46,7 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Directory.cs" />
+    <Compile Include="FAT32.cs" />
+    <Compile Include="File.cs" />
     <Compile Include="FileListView.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="Utilities\FakeFolder.cs" />
     <Compile Include="FileManagement.cs" />
     <Compile Include="Form1.cs">
@@ -85,6 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

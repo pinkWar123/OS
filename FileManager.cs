@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-
+using System.Windows.Forms;
 
 class FileManager
 {
@@ -12,9 +12,33 @@ class FileManager
     public string MainName;
     public DateTime Creationdatetime;
 
+    public virtual int GetSize() { return 0; }
 
+    // Properties for UI
+    protected TreeNode CurrentNode = new TreeNode();
+    protected ListViewItem CurrentItem = new ListViewItem();
     public FileManager() { }
     virtual public void PrintImfomations(int level) { }
+
+    // Methods for UI
+    public virtual void Populate() { }
+
+    public virtual void PopulateListView(ListView ListView) { }
+
+    public void SetNode(TreeNode node)
+    {
+        CurrentNode = node;
+    }
+
+    public TreeNode GetNode()
+    {
+        return CurrentNode;
+    }
+
+    public ListViewItem GetListViewItem()
+    {
+        return CurrentItem;
+    }
 }
 class FATFileManager : FileManager
 {
