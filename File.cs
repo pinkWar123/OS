@@ -22,6 +22,24 @@ class FATFile : FATFileManager
             Console.Write("\t");
         Console.WriteLine("**" + MainName + "." + ExtendedName + "--" + FileSize + "--" + Creationdatetime.Day + "/" + Creationdatetime.Month + "/" + Creationdatetime.Year + "-" + Creationdatetime.Hour + ":" + Creationdatetime.Minute + ":" + Creationdatetime.Second);
     }
+
+    public override int GetSize() { return (int)FileSize; }
+
     ~FATFile() { }
 
+
+    // Methods for UI
+    public override void Populate()
+    {
+        CurrentNode.ImageKey = "fileIcon";
+        CurrentNode.SelectedImageKey = "fileIcon";
+        CurrentNode.Tag = this;
+        CurrentItem.Tag = this;
+        CurrentItem.Text = this.MainName;
+        CurrentItem.SubItems.Add("File");
+        CurrentItem.SubItems.Add(GetSize().ToString());
+        CurrentItem.SubItems.Add(Creationdatetime.ToString());
+        
+
+    }
 }
